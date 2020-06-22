@@ -127,3 +127,4 @@ RUN make makewisdom && \
     make clean
 ENV PATH="/code/presto/bin/:${PATH}"
 
+ADD docker/ACCEL_sift.py /usr/bin/
