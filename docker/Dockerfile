@@ -15,10 +15,6 @@ RUN apt-get update && \
     python \
     libpython3.8-dev \
     python3-pip \
-    python3-numpy \
-    python3-six \
-    python3-scipy \
-    python3-astropy \
     python3-setuptools \
     gfortran \
     libglib2.0-dev \
