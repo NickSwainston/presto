@@ -51,7 +51,8 @@ RUN apt-get update && \
     libxml2-dev \
     libltdl-dev \
     gsl-bin \
-    libgsl-dev 
+    libgsl-dev \
+    bc
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py && \
