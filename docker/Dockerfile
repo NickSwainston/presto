@@ -35,6 +35,7 @@ RUN apt-get update && \
     pgplot5 \
     hwloc \
     python-dev \
+    latex2html \
     libfftw3-3 \
     libfftw3-bin \
     libfftw3-dev \
