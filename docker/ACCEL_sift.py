@@ -12,58 +12,56 @@ parser.add_argument('--dir', type=str, default="./",
                     help="Work dir. Should be my search sub dirs, eg DM_000-002.")
 parser.add_argument('-f', '--file_name', type=str, default="",
                     help="The filename to be used for the output file cand_<file_name>.txt")
+
+parser.add_argument('--min_num_DMs', type=int, default=8,
+                    help='In how many DMs must a candidate be detected to be considered "good"')
+parser.add_argument('--low_DM_cutoff', type=float, default=1.0,
+                    help='Lowest DM to consider as a "real" pulsar')
+parser.add_argument('--sigma_threshold', type=float, default=3.0,
+                    help='Ignore candidates with a sigma (from incoherent power summation) less than this')
+parser.add_argument('--c_pow_threshold', type=float, default=10.0,
+                    help='Ignore candidates with a coherent power less than this')
+
+parser.add_argument('--known_birds_p', type=float, nargs='*', default=[],
+                    help="If the birds file works well, the following shouldn't be needed at all..."
+                         "If they are, add tuples with the bad values and their errors. (ms, err)")
+parser.add_argument('--known_birds_f', type=float, nargs='*', default=[],
+                    help="If the birds file works well, the following shouldn't be needed at all..."
+                         "If they are, add tuples with the bad values and their errors. (Hz, err)")
+
+parser.add_argument('--r_err', type=float, default=1.1,
+                    help='How close a candidate has to be to another candidate to '
+                          'consider it the same candidate (in Fourier bins)')
+parser.add_argument('--short_period', type=float, default=0.0005,
+                    help='Shortest period candidates to consider (s)')
+parser.add_argument('--long_period', type=float, default=15.0,
+                    help='Longest period candidates to consider (s)')
+parser.add_argument('--harm_pow_cutoff', type=float, default=3.0,
+                    help='Ignore any candidates where at least one harmonic does exceed this power')
 args=parser.parse_args()
 
-# Note:  You will almost certainly want to adjust
-#        the following variables for your particular search
-
 d=args.dir
-print(d)
 if d.endswith("/"):
     d = d[:-1]
 # glob for ACCEL files
 globaccel = "{0}/*ACCEL_*0".format(d)
 # glob for .inf files
-#globinf = "../*/*DM*.inf"
 globinf = "{0}/*DM*.inf".format(d)
 inffiles = glob.glob(globinf)
 candfiles = glob.glob(globaccel)
 
-
-
-#print candfiles
-#print inffiles
-
-# In how many DMs must a candidate be detected to be considered "good"
-min_num_DMs = 8
-# Lowest DM to consider as a "real" pulsar
-low_DM_cutoff = 1.0
-# Ignore candidates with a sigma (from incoherent power summation) less than this
-sifting.sigma_threshold = 3.0
-# Ignore candidates with a coherent power less than this
-sifting.c_pow_threshold = 10.0
-
-# If the birds file works well, the following shouldn't
-# be needed at all...  If they are, add tuples with the bad
-# values and their errors.
-#                (ms, err)
-sifting.known_birds_p = []
-#                (Hz, err)
-sifting.known_birds_f = []
+sifting.sigma_threshold = args.sigma_threshold
+sifting.c_pow_threshold = args.c_pow_threshold
+sifting.known_birds_p = args.known_birds_p
+sifting.known_birds_f = args.known_birds_f
 
 # The following are all defined in the sifting module.
 # But if we want to override them, uncomment and do it here.
 # You shouldn't need to adjust them for most searches, though.
-
-# How close a candidate has to be to another candidate to
-# consider it the same candidate (in Fourier bins)
-sifting.r_err = 1.1
-# Shortest period candidates to consider (s)
-sifting.short_period = 0.0005
-# Longest period candidates to consider (s)
-sifting.long_period = 15.0
-# Ignore any candidates where at least one harmonic does exceed this power
-sifting.harm_pow_cutoff = 3.0
+sifting.r_err = args.r_err
+sifting.short_period = args.short_period
+sifting.long_period = args.long_period
+sifting.harm_pow_cutoff = args.harm_pow_cutoff
 
 #--------------------------------------------------------------
 
