@@ -41,7 +41,7 @@ low_DM_cutoff = 1.0
 # Ignore candidates with a sigma (from incoherent power summation) less than this
 sifting.sigma_threshold = 3.0
 # Ignore candidates with a coherent power less than this
-sifting.c_pow_threshold = 50.0
+sifting.c_pow_threshold = 10.0
 
 # If the birds file works well, the following shouldn't
 # be needed at all...  If they are, add tuples with the bad
