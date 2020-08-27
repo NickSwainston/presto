@@ -87,7 +87,7 @@ if len(cands):
 
 # Remove candidates with DM problems
 if len(cands):
-    cands = sifting.remove_DM_problems(cands, min_num_DMs, dmstrs, low_DM_cutoff)
+    cands = sifting.remove_DM_problems(cands, args.min_num_DMs, dmstrs, args.low_DM_cutoff)
 
 # Remove candidates that are harmonically related to each other
 # Note:  this includes only a small set of harmonics
