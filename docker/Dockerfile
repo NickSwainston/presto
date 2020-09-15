@@ -49,7 +49,8 @@ RUN apt-get update && \
     libltdl-dev \
     gsl-bin \
     libgsl-dev \
-    bc
+    bc \
+    gnuplot
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py && \
