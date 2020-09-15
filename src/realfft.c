@@ -73,66 +73,65 @@ int main(int argc, char *argv[])
     datfilenms = (char **) malloc(numfiles * sizeof(char *));
     tmpfilenms = (char **) malloc(numfiles * sizeof(char *));
     outfilenms = (char **) malloc(numfiles * sizeof(char *));
-    {
-        int hassuffix = 0, new_hassuffix = 0, filenmlen;
-        char *dir, *filenm, *root, *suffix;
 
-        for (ii = 0; ii < numfiles; ii++) {
-            if (ii == 0) {
-                split_path_file(cmd->argv[0], &datdir, &filenm);
-                hassuffix = split_root_suffix(filenm, &root, &suffix);
-                if (hassuffix) {
-                    if (strcmp(suffix, "fft") == 0) {
-                        isign = 1;
-                        strcpy(datsuffix, "fft");
-                        strcpy(outsuffix, "dat");
-                    }
-                    free(suffix);
+    int hassuffix = 0, new_hassuffix = 0, filenmlen;
+    char *dir, *filenm, *root, *suffix;
+
+    for (ii = 0; ii < numfiles; ii++) {
+        if (ii == 0) {
+            split_path_file(cmd->argv[0], &datdir, &filenm);
+            hassuffix = split_root_suffix(filenm, &root, &suffix);
+            if (hassuffix) {
+                if (strcmp(suffix, "fft") == 0) {
+                    isign = 1;
+                    strcpy(datsuffix, "fft");
+                    strcpy(outsuffix, "dat");
                 }
-                free(filenm);
-            } else {
-                split_path_file(cmd->argv[ii], &dir, &filenm);
-                new_hassuffix = split_root_suffix(filenm, &root, &suffix);
-                if (new_hassuffix && hassuffix) {
-                    if (strcmp(datsuffix, suffix)) {
-                        printf("\nAll input files must have the same suffix!\n\n");
-                        exit(1);
-                    }
-                }
-                if (strcmp(datdir, dir)) {
-                    printf("\nAll input files must be in the same directory!\n\n");
+                free(suffix);
+            }
+            free(filenm);
+        } else {
+            split_path_file(cmd->argv[ii], &dir, &filenm);
+            new_hassuffix = split_root_suffix(filenm, &root, &suffix);
+            if (new_hassuffix && hassuffix) {
+                if (strcmp(datsuffix, suffix)) {
+                    printf("\nAll input files must have the same suffix!\n\n");
                     exit(1);
                 }
-                if (new_hassuffix)
-                    free(suffix);
-                free(dir);
-                free(filenm);
             }
-            filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
-            datfilenms[ii] = (char *) calloc(filenmlen, 1);
-            sprintf(datfilenms[ii], "%s/%s.%s", datdir, root, datsuffix);
-            if (cmd->tmpdirP) {
-                filenmlen = strlen(cmd->tmpdir) + 1 + strlen(root) + 10;
-                tmpfilenms[ii] = (char *) calloc(filenmlen, 1);
-                sprintf(tmpfilenms[ii], "%s/%s.%s", cmd->tmpdir, root, tmpsuffix);
-            } else {
-                filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
-                tmpfilenms[ii] = (char *) calloc(filenmlen, 1);
-                sprintf(tmpfilenms[ii], "%s/%s.%s", datdir, root, tmpsuffix);
+            if (strcmp(datdir, dir)) {
+                printf("\nAll input files must be in the same directory!\n\n");
+                exit(1);
             }
-            if (cmd->outdirP) {
-                filenmlen = strlen(cmd->outdir) + 1 + strlen(root) + 10;
-                outfilenms[ii] = (char *) calloc(filenmlen, 1);
-                sprintf(outfilenms[ii], "%s/%s.%s", cmd->outdir, root, outsuffix);
-            } else {
-                filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
-                outfilenms[ii] = (char *) calloc(filenmlen, 1);
-                sprintf(outfilenms[ii], "%s/%s.%s", datdir, root, outsuffix);
-            }
-            free(root);
+            if (new_hassuffix)
+                free(suffix);
+            free(dir);
+            free(filenm);
         }
-        free(datdir);
+        filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
+        datfilenms[ii] = (char *) calloc(filenmlen, 1);
+        sprintf(datfilenms[ii], "%s/%s.%s", datdir, root, datsuffix);
+        if (cmd->tmpdirP) {
+            filenmlen = strlen(cmd->tmpdir) + 1 + strlen(root) + 10;
+            tmpfilenms[ii] = (char *) calloc(filenmlen, 1);
+            sprintf(tmpfilenms[ii], "%s/%s.%s", cmd->tmpdir, root, tmpsuffix);
+        } else {
+            filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
+            tmpfilenms[ii] = (char *) calloc(filenmlen, 1);
+            sprintf(tmpfilenms[ii], "%s/%s.%s", datdir, root, tmpsuffix);
+        }
+        if (cmd->outdirP) {
+            filenmlen = strlen(cmd->outdir) + 1 + strlen(root) + 10;
+            outfilenms[ii] = (char *) calloc(filenmlen, 1);
+            sprintf(outfilenms[ii], "%s/%s.%s", cmd->outdir, root, outsuffix);
+        } else {
+            filenmlen = strlen(datdir) + 1 + strlen(root) + 10;
+            outfilenms[ii] = (char *) calloc(filenmlen, 1);
+            sprintf(outfilenms[ii], "%s/%s.%s", datdir, root, outsuffix);
+        }
+        free(root);
     }
+    free(datdir);
 
     /* Force a forward or inverse transform.   */
     /* Note that the suffixes do _not_ change! */
@@ -168,6 +167,7 @@ int main(int argc, char *argv[])
         }
     }
     numdata = datfiles->length / numfiles / sizeof(float);
+
     if (isign == -1)
         printf("\nData OK.  There are %lld floats.\n\n", numdata);
     else
@@ -175,7 +175,6 @@ int main(int argc, char *argv[])
     printf("Result will be written to %d output file(s):\n", numfiles);
     for (ii = 0; ii < numfiles; ii++)
         printf("   %d:  '%s'\n", ii + 1, outfilenms[ii]);
-    fclose_multifile(datfiles);
 
     /* Copy the input files if we want to keep them */
 
@@ -204,7 +203,7 @@ int main(int argc, char *argv[])
         }
         free(cmd);
     }
-
+    fclose_multifile(datfiles);
     /* loop over files */
     for (int fi = 0; fi < numfiles; fi++)
     {
