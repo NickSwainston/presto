@@ -86,7 +86,7 @@ if len(cands):
     cands = sifting.remove_duplicate_candidates(cands)
 
 # Remove candidates with DM problems
-if len(cands):
+if len(cands) and args.min_num_DMs > 1:
     cands = sifting.remove_DM_problems(cands, args.min_num_DMs, dmstrs, args.low_DM_cutoff)
 
 # Remove candidates that are harmonically related to each other
