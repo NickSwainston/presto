@@ -50,7 +50,8 @@ RUN apt-get update && \
     gsl-bin \
     libgsl-dev \
     bc \
-    gnuplot
+    gnuplot \
+    xauth
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python get-pip.py && \
