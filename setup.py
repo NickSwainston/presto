@@ -11,7 +11,7 @@ version = "3.0.1"
 
 define_macros = []
 undef_macros = []
-extra_compile_args = ["-DUSEFFTW"]
+extra_compile_args = ["-DUSEFFTW", "-fPIC"]
 include_dirs = [numpy.get_include()]
 # For MacOS with MacPorts use the following
 # include_dirs.append("/opt/local/include")
