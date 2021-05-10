@@ -20,6 +20,7 @@ RUN apt-get update -qq && \
     gfortran \
     libglib2.0-dev \
     libpng-dev \
+    latex2html \
     bc \
     curl \
     autoconf \
@@ -81,6 +82,7 @@ RUN wget https://www.atnf.csiro.au/research/pulsar/psrcat/downloads/psrcat_pkg.t
     ls && \
     bash makeit && \
     cp psrcat /usr/bin
+ENV PSRCAT_FILE=/home/soft/psrcat_tar/psrcat.db
     
 # Install tempo
 RUN git clone https://github.com/nanograv/tempo.git && \
@@ -108,6 +110,7 @@ WORKDIR /usr/local/pgplot
 ADD docker/drivers.list /usr/local/pgplot
 RUN /usr/local/src/pgplot/makemake /usr/local/src/pgplot linux g77_gcc_aout && \
     sed -i 's/FCOMPL=g77/FCOMPL=gfortran/' makefile && \
+    sed -i 's|pndriv.o : ./png.h|#### pndriv.o : ./png.h|g' makefile && \
     make && \
     make cpg && \
     make clean
